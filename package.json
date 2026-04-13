@@ -1,43 +1,39 @@
 {
-  "name": "sol",
-  "version": "3.2.14",
-  "description": "Atomic styles and javascript for MoMA digital properties",
-  "main": "dist/sol.js",
-  "module": "src/js/main.js",
-  "style": "dist/sol.css",
+  "name": "@jeremedia/sol-workspace",
+  "private": true,
+  "version": "0.0.0-modernization",
+  "description": "Modern Sol workspace",
   "repository": "git://github.com/MuseumofModernArt/sol.git",
   "author": "MoMA Digital Media",
   "license": "SEE LICENSE IN README.MD",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
+  "packageManager": "npm@11.11.0",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
-    "install-sass": "SASS=sass/sass/sass; if brew ls --versions $SASS; then brew upgrade $SASS; else brew install $SASS; fi",
-    "test": "jest",
-    "build-sass-dev": "sass src/stylesheets/main.scss:dist/sol.css",
-    "build-sass-prod": "sass src/stylesheets/main.scss:dist/sol.min.css --style=compressed",
-    "build-webpack-prod": "webpack -p --config webpack.config.js --mode production",
-    "build-webpack-dev": "webpack -p --config webpack.config.js --mode development",
-    "build": "yarn run build-sass-dev && yarn run build-sass-prod && yarn run build-webpack-prod",
-    "build-dev": "yarn run build-sass-dev && yarn run build-webpack-dev",
-    "watch-sass": "sass --watch --poll src/stylesheets/main.scss:dist/sol.css",
-    "watch-webpack": "webpack --progress --watch --config webpack.config.js --mode development",
-    "watch": "yarn watch-sass & yarn watch-webpack",
-    "prepublishOnly": "yarn build",
-    "release": "./bin/release.sh"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build:tokens": "npm run build:tokens --workspace @jeremedia/sol-core",
+    "check:tokens": "npm run check:tokens --workspace @jeremedia/sol-core",
+    "build:core": "npm run build --workspace @jeremedia/sol-core",
+    "check:core": "npm run check:artifacts --workspace @jeremedia/sol-core",
+    "build:tailwind": "npm run build --workspace @jeremedia/sol-tailwind",
+    "check:tailwind": "npm run check:artifacts --workspace @jeremedia/sol-tailwind",
+    "build:docs": "npm run build --workspace @jeremedia/sol-docs",
+    "check:docs": "npm run check:artifacts --workspace @jeremedia/sol-docs",
+    "check:packages": "npm run check:core && npm run check:tailwind",
+    "check:artifacts": "npm run check:packages && npm run check:docs",
+    "build": "npm run build:core && npm run build:tailwind && npm run build:docs",
+    "release": "node ./bin/release.mjs"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.2",
-    "@babel/preset-env": "^7.10.2",
-    "babel-loader": "^8.1.0",
-    "jest": "^26.0.1",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
-  },
-  "dependencies": {
-    "balance-text": "^3.3.0"
+    "@tailwindcss/cli": "^4.2.2",
+    "happy-dom": "^20.8.9",
+    "tailwindcss": "^4.2.2",
+    "vitest": "^4.1.4"
   },
   "engines": {
-    "node": "20"
+    "node": "24.x"
   }
 }

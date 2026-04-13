@@ -1,0 +1,425 @@
+#!/usr/bin/env node
+
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { fontFaces } from "./core-fonts.mjs";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const packageRoot = resolve(__dirname, "..");
+const distDir = resolve(packageRoot, "dist");
+const sourcePath = resolve(packageRoot, "src/tokens/sol.tokens.json");
+const tokensCssPath = resolve(distDir, "tokens.css");
+const coreCssPath = resolve(distDir, "core.css");
+
+const checkMode = process.argv.includes("--check");
+const tokenSource = JSON.parse(readFileSync(sourcePath, "utf8"));
+const tokensCss = readFileSync(tokensCssPath, "utf8").trimEnd();
+
+const desktopWidth = tokenSource.breakpoints.width[tokenSource.breakpoints.desktop];
+const fontWeights = tokenSource.typography["font-weights"];
+const faceTokenNames = Object.keys(tokenSource.typography.faces.bold);
+const namedTypographySizes = tokenSource.typography.sizes.named;
+const discreteTypographySizes = tokenSource.typography.sizes.discrete;
+
+function compareOrWrite(filePath, content) {
+  if (checkMode) {
+    const existing = readFileSync(filePath, "utf8");
+
+    if (existing !== content) {
+      console.error(`Core CSS artifact is out of date: ${filePath}`);
+      process.exit(1);
+    }
+
+    return;
+  }
+
+  writeFileSync(filePath, content, "utf8");
+}
+
+function formatDeclarations(declarations, indent = "  ") {
+  return Object.entries(declarations)
+    .map(([name, value]) => `${indent}${name}: ${value};`)
+    .join("\n");
+}
+
+function formatRule(selectors, declarations) {
+  const selectorText = Array.isArray(selectors)
+    ? selectors.join(",\n")
+    : selectors;
+
+  return `${selectorText} {\n${formatDeclarations(declarations)}\n}`;
+}
+
+function formatMedia(query, rules) {
+  const indentedRules = rules
+    .join("\n\n")
+    .split("\n")
+    .map((line) => `  ${line}`)
+    .join("\n");
+
+  return `@media ${query} {\n${indentedRules}\n}`;
+}
+
+function typographySelectors() {
+  return [".sol-typography", "[data-sol-typography]"];
+}
+
+function modifierSelectors(type, value) {
+  return [
+    `.sol-typography--${type}-${value}`,
+    `[data-sol-typography-${type}="${value}"]`
+  ];
+}
+
+function languageTypographySelectors(language) {
+  return typographySelectors().map(
+    (selector) => `${selector}:lang(${language})`
+  );
+}
+
+function renderFontFace(fontFace) {
+  return [
+    "@font-face {",
+    `  font-family: "${fontFace.family}";`,
+    `  src: url("./moma-sans/${fontFace.file}") format("woff2");`,
+    `  font-display: swap;`,
+    `  font-weight: ${fontWeights[fontFace.weight]};`,
+    `  font-style: ${fontFace.style};`,
+    "}"
+  ].join("\n");
+}
+
+function renderWeightModifier(weightName) {
+  const declarations = {};
+
+  for (const tokenName of faceTokenNames) {
+    declarations[`--typography--${tokenName}`] =
+      `var(--typography--face--${weightName}--${tokenName})`;
+  }
+
+  return formatRule(modifierSelectors("weight", weightName), declarations);
+}
+
+function renderBaselineModifier(baselineName, values) {
+  const declarations = {};
+  const desktopDeclarations = {};
+
+  for (const [tokenName, tokenValue] of Object.entries(values)) {
+    const variableName = `--typography--${tokenName}`;
+
+    if (tokenValue && typeof tokenValue === "object" && "mobile" in tokenValue) {
+      declarations[variableName] =
+        `var(--typography--preset--${baselineName}--${tokenName})`;
+
+      if ("desktop" in tokenValue) {
+        desktopDeclarations[variableName] =
+          `var(--typography--preset--${baselineName}--${tokenName}--desktop)`;
+      }
+
+      continue;
+    }
+
+    declarations[variableName] =
+      `var(--typography--preset--${baselineName}--${tokenName})`;
+  }
+
+  const rules = [formatRule(modifierSelectors("baseline", baselineName), declarations)];
+
+  if (Object.keys(desktopDeclarations).length > 0) {
+    rules.push(
+      formatMedia(
+        `(min-width: ${desktopWidth}px)`,
+        [
+          formatRule(
+            modifierSelectors("baseline", baselineName),
+            desktopDeclarations
+          )
+        ]
+      )
+    );
+  }
+
+  return rules.join("\n\n");
+}
+
+function renderNamedSizeModifier(sizeName, values) {
+  const baseRule = formatRule(modifierSelectors("size", sizeName), {
+    "--typography--size": `var(--typography--size--${sizeName})`
+  });
+
+  if (!("desktop" in values)) {
+    return baseRule;
+  }
+
+  return [
+    baseRule,
+    formatMedia(
+      `(min-width: ${desktopWidth}px)`,
+      [
+        formatRule(modifierSelectors("size", sizeName), {
+          "--typography--size": `var(--typography--size--${sizeName}--desktop)`
+        })
+      ]
+    )
+  ].join("\n\n");
+}
+
+function renderDiscreteSizeModifier(size) {
+  return formatRule(modifierSelectors("size", `${size}pt`), {
+    "--typography--size": `var(--typography--size--${size}pt)`
+  });
+}
+
+const cssSections = [
+  "/*",
+  " * Generated by packages/core/scripts/build-core-css.mjs",
+  " * Do not edit this file directly.",
+  " */",
+  "",
+  tokensCss,
+  "",
+  ...fontFaces.map((fontFace) => renderFontFace(fontFace)),
+  "",
+  formatRule("html", {
+    "-webkit-text-size-adjust": "none",
+    "font-size": "62.5%"
+  }),
+  "",
+  formatRule("html *", {
+    "-webkit-text-size-adjust": "none"
+  }),
+  "",
+  formatRule("body", {
+    "-moz-osx-font-smoothing": "grayscale",
+    "-webkit-font-smoothing": "antialiased",
+    "font-family": "var(--font-family--sans-language)",
+    "font-kerning": "normal",
+    "font-weight": "var(--font-weight--regular)",
+    "text-rendering": "optimizeLegibility"
+  }),
+  "",
+  formatRule(
+    [
+      ":lang(zh-Hans)",
+      ":lang(zh-Hant)",
+      ":lang(ko)",
+      ":lang(ja)",
+      "form",
+      "button",
+      "input",
+      "input::placeholder"
+    ],
+    {
+      "font-family": "var(--font-family--sans-language)"
+    }
+  ),
+  "",
+  formatRule("a", {
+    color: "inherit",
+    "text-decoration": "none"
+  }),
+  "",
+  formatRule(["em", "i"], {
+    "font-style": "italic"
+  }),
+  "",
+  formatRule("del", {
+    "text-decoration": "line-through"
+  }),
+  "",
+  formatRule(typographySelectors(), {
+    "--typography--tracking--override": "var(--typography--tracking)",
+    "--typography--letter-spacing":
+      "calc(var(--typography--tracking--override, var(--typography--tracking)) * 1em)",
+    "--typography--margin--left": "calc(var(--typography--inset-left) * 1em)",
+    "--typography--margin--right": "calc(var(--typography--inset-right) * 1em)",
+    "--typography--size--rendered":
+      "calc(var(--typography--size--override, var(--typography--size)) * var(--rem-conversion))",
+    "--typography--font-size":
+      "calc(var(--typography--scale, 1) * var(--typography--size--rendered))",
+    "--typography--line-height":
+      "calc(var(--typography--leading) * var(--typography--size--rendered))",
+    "--typography--leading--remainder":
+      "calc((var(--typography--leading) - 1) / 2)",
+    "--typography--shift":
+      "calc((var(--typography--shoulder) + var(--typography--shoulder--top)) * (1 - var(--typography--scale, 1)))",
+    "--typography--leading--bottom":
+      "calc(var(--typography--shoulder--bottom) + var(--typography--leading--remainder) + var(--typography--shift, 0))",
+    "--typography--leading--top":
+      "calc(var(--typography--shoulder--top) + var(--typography--leading--remainder) - var(--typography--shift, 0))",
+    "--typography--margin--bottom":
+      "calc(-1 * var(--typography--leading--bottom) * var(--typography--size--rendered))",
+    "--typography--margin--top":
+      "calc(-1 * var(--typography--leading--top) * var(--typography--size--rendered))",
+    color: "var(--color, rgba(var(--color--rgb), 1))",
+    display: "block",
+    "font-family": "var(--font-family--sans-language)",
+    "font-size": "var(--typography--font-size)",
+    "font-weight": "var(--typography--weight)",
+    "letter-spacing": "var(--typography--letter-spacing)",
+    "line-height": "var(--typography--line-height)",
+    "margin-left": "var(--typography--margin--left)",
+    "margin-right": "var(--typography--margin--right)",
+    "margin-top": "0",
+    "margin-bottom": "0",
+    "max-width":
+      "calc(100% - var(--typography--margin--left) - var(--typography--margin--right) + var(--rem-conversion))",
+    "overflow-wrap": "break-word"
+  }),
+  "",
+  formatRule(typographySelectors(), {
+    display: "flow-root"
+  }).replace(/^/, "@supports (display: flow-root) {\n").concat("\n}"),
+  "",
+  formatRule(
+    typographySelectors().flatMap((selector) => [
+      `${selector}::before`,
+      `${selector}::after`
+    ]),
+    {
+      content: "\"\"",
+      display: "block",
+      visibility: "hidden"
+    }
+  ),
+  "",
+  formatRule(typographySelectors().map((selector) => `${selector}::before`), {
+    "margin-top":
+      "calc(var(--typography--margin--top) - (var(--typography--margin--top--shift, 0) * var(--typography--size--rendered)))"
+  }),
+  "",
+  formatRule(typographySelectors().map((selector) => `${selector}::after`), {
+    "margin-bottom": "var(--typography--margin--bottom)"
+  }),
+  "",
+  formatRule(
+    typographySelectors().flatMap((selector) => [
+      `${selector} sup`,
+      `${selector} sub`
+    ]),
+    {
+      "--typography--script--scale":
+        "calc(var(--typography--script-cap-height) / var(--typography--cap-height))",
+      "--typography--script--font-size":
+        "calc(var(--typography--size) * var(--typography--scale, 1) * var(--typography--script--scale) * var(--rem-conversion))",
+      color: "inherit",
+      display: "inline-block",
+      "font-size": "var(--typography--script--font-size)",
+      "line-height": "1",
+      "margin-left":
+        "calc(0.25 * var(--typography--script-cap-height) * var(--typography--script--font-size))",
+      transform:
+        "translateY(calc(-1 * var(--typography--script--shift) * var(--typography--font-size)))",
+      "vertical-align": "baseline"
+    }
+  ),
+  "",
+  formatRule(typographySelectors().map((selector) => `${selector} sup`), {
+    "--typography--script--shift": "var(--typography--superscript-offset)"
+  }),
+  "",
+  formatRule(typographySelectors().map((selector) => `${selector} sub`), {
+    "--typography--script--shift": "var(--typography--subscript-offset)"
+  }),
+  "",
+  formatRule(
+    [
+      "input.sol-typography",
+      "input[data-sol-typography]"
+    ],
+    {
+      "margin-bottom":
+        "calc(var(--typography--margin--bottom) - var(--typography--shoulder--input) * 1em)",
+      "margin-top":
+        "calc(var(--typography--margin--top) - var(--typography--shoulder--input) * 1em)",
+      width:
+        "calc(100% - var(--typography--margin--left) - var(--typography--margin--right))"
+    }
+  ),
+  "",
+  formatRule(
+    [
+      "input.sol-typography::before",
+      "input.sol-typography::after",
+      "input[data-sol-typography]::before",
+      "input[data-sol-typography]::after"
+    ],
+    {
+      content: "initial"
+    }
+  ),
+  "",
+  formatRule(
+    [
+      "input.sol-typography::placeholder",
+      "input[data-sol-typography]::placeholder"
+    ],
+    {
+      color: "rgba(var(--color--rgb), 0.47)",
+      "font-family": "var(--font-family--sans-language)"
+    }
+  ),
+  "",
+  renderWeightModifier("regular"),
+  "",
+  renderWeightModifier("bold"),
+  "",
+  renderBaselineModifier("body", tokenSource.typography.presets.body),
+  "",
+  renderBaselineModifier("solid", tokenSource.typography.presets.solid),
+  "",
+  ...Object.entries(namedTypographySizes).flatMap(([sizeName, values]) => [
+    renderNamedSizeModifier(sizeName, values),
+    ""
+  ]),
+  ...discreteTypographySizes.flatMap((size) => [
+    renderDiscreteSizeModifier(size),
+    ""
+  ]),
+  formatRule(
+    [
+      ".sol-typography--nowrap",
+      "[data-sol-typography-nowrap]"
+    ],
+    {
+      "white-space": "nowrap"
+    }
+  ),
+  "",
+  formatRule(
+    [
+      ...languageTypographySelectors("ja"),
+      ...languageTypographySelectors("zh-Hans"),
+      ...languageTypographySelectors("zh-Hant")
+    ],
+    {
+      "--typography--tracking--override": "0.04"
+    }
+  ),
+  "",
+  formatRule(languageTypographySelectors("ko"), {
+    "--typography--tracking--override": "0"
+  }),
+  "",
+  formatRule(
+    [
+      '.sol-typography:lang(ja)[data-sol-typography-script="kana"]',
+      '[data-sol-typography]:lang(ja)[data-sol-typography-script="kana"]'
+    ],
+    {
+      "--typography--tracking--override": "-0.1"
+    }
+  )
+];
+
+const cssOutput = `${cssSections.filter(Boolean).join("\n")}\n`;
+
+mkdirSync(distDir, { recursive: true });
+
+compareOrWrite(coreCssPath, cssOutput);
+
+if (!checkMode) {
+  console.log(`Generated ${coreCssPath}`);
+}

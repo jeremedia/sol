@@ -1,0 +1,46 @@
+{
+  "name": "@jeremedia/sol-core",
+  "version": "0.0.0-modernization",
+  "description": "Modern Sol core tokens and shared primitives",
+  "type": "module",
+  "main": "./src/js/index.js",
+  "module": "./src/js/index.js",
+  "style": "dist/core.css",
+  "license": "SEE LICENSE IN README.MD",
+  "exports": {
+    ".": "./src/js/index.js",
+    "./asian-fonts": "./src/js/asian-fonts.js",
+    "./focus": "./src/js/focus.js",
+    "./core.css": "./dist/core.css",
+    "./keycodes": "./src/js/keycodes.js",
+    "./moma-balance-text": "./src/js/moma-balance-text.js",
+    "./nav": "./src/js/nav.js",
+    "./session-color": "./src/js/session-color.js",
+    "./tokens.css": "./dist/tokens.css",
+    "./tokens.json": "./dist/tokens.json",
+    "./util": "./src/js/util.js",
+    "./viewporter": "./src/js/viewporter.js",
+    "./moma-sans/*": "./dist/moma-sans/*"
+  },
+  "sideEffects": [
+    "*.css",
+    "**/*.css"
+  ],
+  "dependencies": {
+    "balance-text": "^3.3.0"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build:tokens": "node ./scripts/generate-tokens.mjs",
+    "check:tokens": "node ./scripts/generate-tokens.mjs --check",
+    "build:css": "node ./scripts/build-core-css.mjs",
+    "check:css": "node ./scripts/build-core-css.mjs --check",
+    "build:fonts": "node ./scripts/sync-font-assets.mjs",
+    "check:fonts": "node ./scripts/sync-font-assets.mjs --check",
+    "build": "npm run build:tokens && npm run build:css && npm run build:fonts",
+    "check:artifacts": "npm run check:tokens && npm run check:css && npm run check:fonts"
+  }
+}

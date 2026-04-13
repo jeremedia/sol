@@ -1,0 +1,28 @@
+{
+  "name": "@jeremedia/sol-tailwind",
+  "version": "0.0.0-modernization",
+  "description": "CSS-first Tailwind v4 adapters for modern Sol tokens",
+  "style": "dist/index.css",
+  "license": "SEE LICENSE IN README.MD",
+  "sideEffects": [
+    "*.css",
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": "./dist/index.css",
+    "./preflight.css": "./dist/preflight.css",
+    "./theme.css": "./dist/theme.css",
+    "./utilities.css": "./dist/utilities.css"
+  },
+  "scripts": {
+    "build": "node ./scripts/generate-tailwind-adapter.mjs",
+    "check:artifacts": "node ./scripts/generate-tailwind-adapter.mjs --check"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^4.2.0"
+  }
+}
