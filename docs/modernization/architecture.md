@@ -58,8 +58,9 @@ The migration bridge.
 
 The adapter layer.
 
-- Tailwind preset for Sol tokens
-- Optional plugin helpers for typography, spacing, and color access
+- CSS-first Tailwind v4 adapter built on `@theme inline`, `@utility`, and `@custom-variant`
+- Sol token aliases for Tailwind color, font, breakpoint, spacing, and type utilities
+- Small Sol-specific helpers for baseline-trimmed typography integration
 - No Sol-specific source of truth should live here
 
 ### `apps/docs`
