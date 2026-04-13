@@ -1,82 +1,56 @@
-# Sol Modernization Roadmap
+# Modernization Status
 
-This fork is not a cosmetic rewrite. The goal is to preserve the parts of Sol that are genuinely valuable while replacing the delivery mechanism that now causes drag: Sass macro generation, Webpack 4 packaging, detached release commits, and wiki-only operational knowledge.
+This branch has completed the structural rewrite needed to support a modern Sol package surface.
 
-## Current State
+## What Landed
 
-The upstream release line contains three distinct asset groups that need different treatment:
+### Workspace and Tooling
 
-1. Design primitives worth preserving.
-   Colors, spacing, motion, focus behavior, font assets, session color logic, and typography metrics are the durable parts of the system.
-2. Legacy delivery mechanisms worth replacing.
-   Sass atom/variant macros, Webpack 4, Babel 7, committed `dist/`, and detached-tag releases are operational debt.
-3. Low-coverage behavior that needs explicit parity checks.
-   Typography shoulder trimming, high-contrast overrides, Asian font handling, and session color behavior are easy to accidentally break.
+- npm workspaces replaced the old Yarn 1 workflow
+- Node `24.x` is the supported runtime
+- Vitest replaced the old Jest/Babel stack
+- CI validates artifact checks, build output, and tests against the current workspace
 
-## Branch Strategy
+### Package Surface
+
+- `@jeremedia/sol-core` is the source of truth for tokens, CSS, fonts, and runtime helpers
+- `@jeremedia/sol-tailwind` provides the optional Tailwind v4 adapter
+- `apps/docs` is the living verification surface for the modern branch
+
+### Legacy Removal
+
+- the old root JS runtime tree was removed
+- the compatibility package was removed from the supported branch
+- the legacy example apps were removed
+- root `dist/sol*` artifacts were removed
+- the legacy Sass source tree was removed from `modernization/main`
+- font source now lives in `packages/core/src/moma-sans`
+
+## Branch Roles
 
 - `main`
-  Mirrors the fork default branch and preserves the imported upstream history.
+  Imported fork default branch history.
 - `legacy/v4`
-  Frozen reference branch from `v4.2.0`. Use this for parity fixtures, visual diffs, and emergency backports.
+  Frozen legacy reference line from `v4.2.0`.
 - `modernization/main`
-  Active development branch for the rewrite.
+  Modern package-first implementation.
 
-Modernization work should branch from `modernization/main`. Legacy-only fixes should branch from `legacy/v4`.
+## What Remains
 
-## Modernization Phases
+The foundational modernization is complete. Remaining work is product-facing expansion rather than infrastructure rescue:
 
-### Phase 0: Repository Foundation
+- publish/version the modern packages intentionally
+- adopt the packages in real consumers
+- expand the docs and fixtures as new components or behaviors are added
+- add stronger visual regression coverage if the branch becomes a long-lived published surface
 
-- Fix CI so it validates `build` as well as `test`.
-- Move modernization decisions into the repo instead of the wiki or release folklore.
-- Document target architecture, parity requirements, and branch/release rules.
-- Stop making architectural decisions from stale `main` history; use `v4.2.0` as the baseline.
+## Definition of Done
 
-### Phase 1: Token Extraction
+For the foundation phase, the branch is done when all of the following are true:
 
-- Extract colors, typography values, spacing, motion, focus, and font metadata into machine-readable source files.
-- Generate native CSS custom properties from those tokens.
-- Preserve exact values first; no value tuning in this phase.
-- Add snapshot coverage for generated token output.
-
-### Phase 2: Runtime Modernization
-
-- Convert the JS layer to ESM-first modules with explicit exports.
-- Replace class-based session color mutation with CSS variable writes.
-- Make Asian font loading configurable and self-hostable by default.
-- Prefer modern browser primitives and CSS features before retaining JS polyfills.
-
-### Phase 3: Adapter Layer
-
-- Add an optional Tailwind preset/plugin built on top of Sol tokens.
-- Keep it an adapter, not the new source of truth.
-- Ensure direct CSS consumption remains first-class.
-
-### Phase 4: Docs and Adoption
-
-- Replace wiki-only guidance with versioned docs and runnable examples.
-- Build parity fixtures directly in `apps/docs` and fall back to the `legacy/v4` branch only when historical comparison is required.
-- Pilot the modern packages in a real consumer before any package-name swap.
-
-## First Deliverables
-
-The first modernization milestone is intentionally small and operational:
-
-- Clean fork and branch strategy
-- In-repo roadmap and architecture docs
-- CI that runs build + test
-- A parity checklist to control the rewrite
-
-That is enough to start real implementation without baking more drift into the repo.
-
-## Definition of Done for the Rewrite
-
-The modernization is complete when all of the following are true:
-
-- Tokens are the primary source of truth.
-- CSS ships as native custom properties and modern entry points.
-- The supported build no longer depends on Sass, Webpack 4, or the legacy root `dist/` artifacts.
-- Releases are reproducible from branch history.
-- Docs, examples, and parity tests live in the repository.
-- JS utilities are modular, typed or type-checked, and framework-agnostic.
+- tokens are the primary source of truth
+- CSS ships through package entrypoints
+- runtime helpers are modular and framework-agnostic
+- the supported branch does not depend on the old root asset layout
+- releases are reproducible from branch history
+- docs and artifact checks live in the repository

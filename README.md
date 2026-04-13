@@ -1,72 +1,120 @@
 # Sol
 
-<br>
+Modern Sol is a clean-break rewrite of MoMA's front-end library.
 
-<a href="https://www.moma.org/collection/works/35205"><img src="https://www.moma.org/d/p/sa/maximum/cri_000000291104.jpg" height="480" /></a>
+This repository is now a private npm workspace for building and validating the modern package surface. The supported implementation is package-first, ESM-first, and built around generated token artifacts, modern CSS, and a small explicit runtime layer.
 
-<br>
+It is not a drop-in replacement for the legacy `sol` package.
 
-> The form itself is of very limited importance; it becomes the grammar for the total work. In fact it is best that the basic unit be deliberately uninteresting so that it may more easily become an intrinsic part of the entire work. Using complex basic forms only disrupts the unity of the whole. Using a simple form repeatedly narrows the field of the work and concentrates the intensity to the arrangement of the form. This arrangement becomes the end while the form becomes the means.
->
-> [Sol LeWitt](https://www.moma.org/artists/3528), [_Paragraphs on Conceptual Art_](https://www.moma.org/documents/moma_catalogue_1971_300297572.pdf#page=171)
+## Status
 
-<br>
-
-**Sol** is a front-end (JS/CSS) library, developed by MoMA’s Digital Product team for use across the organization’s various products. It takes an “atomic” approach of providing simple utility functions and classes which incorporate the basic design paradigms for MoMA’s brand, (mostly) agnostic of their specific usage.
-
-<br>
-
-## Documentation
-
-The modern implementation is documented in-repo:
-
-- `apps/docs` contains the living fixtures and integration examples.
-- `docs/modernization/roadmap.md` tracks the rewrite plan and remaining work.
-- `docs/modernization/architecture.md` documents the target package boundaries.
-- `docs/modernization/parity-checklist.md` records the behaviors that must survive the rewrite.
-
-## Modern Workspace
-
-This fork is being rebuilt in-place from the `v4.2.0` release line as a clean-break, modern implementation.
-
-- `legacy/v4` preserves the last coherent legacy release for systems that still require it.
 - `modernization/main` is the active branch for the modern implementation.
-- `packages/core` is the source of truth for tokens, core CSS, bundled fonts, and runtime modules.
-- `packages/tailwind` provides the CSS-first Tailwind v4 adapter over the core token layer.
-- `apps/docs` is the living fixture site for tokens, typography, and runtime behavior.
-- `docs/modernization/roadmap.md` describes the migration phases and repository plan.
-- `docs/modernization/architecture.md` captures the target package layout and design constraints.
-- `docs/modernization/parity-checklist.md` lists the behaviors that must survive the rewrite.
+- `legacy/v4` preserves the legacy release line for systems that still require it.
+- The supported branch no longer carries the old root `dist/`, Webpack, Sass macro build, or legacy compatibility package as active surfaces.
 
-## Development
+## Packages
 
-Install workspace dependencies with `npm install`, then run `npm run build` to generate the supported artifacts.
+- `@jeremedia/sol-core`
+  Tokens, generated CSS, bundled fonts, and framework-agnostic runtime helpers.
+- `@jeremedia/sol-tailwind`
+  CSS-first Tailwind v4 adapter built on top of the core token layer.
+- `@jeremedia/sol-docs`
+  In-repo docs and fixture app used to verify tokens, typography, session color, language behavior, and accessibility states.
 
-To regenerate or verify the full core package artifacts, run `npm run build:core` or `npm run check:core`.
+## Requirements
 
-To regenerate or verify the Tailwind adapter artifacts, run `npm run build:tailwind` or `npm run check:tailwind`.
+- Node `24.x`
+- npm `11.x`
 
-To regenerate or verify the docs app artifacts, run `npm run build:docs` or `npm run check:docs`.
+The repository root is a private workspace. Consumers should use the package entrypoints, not the root package.
 
-To regenerate or verify the canonical token artifacts only, run `npm run build:tokens` or `npm run check:tokens`.
+## Workspace Commands
+
+Install dependencies:
+
+```sh
+npm install
+```
+
+Build all supported artifacts:
+
+```sh
+npm run build
+```
+
+Run tests:
+
+```sh
+npm test
+```
+
+Verify generated artifacts:
+
+```sh
+npm run check:artifacts
+```
+
+Useful targeted commands:
+
+- `npm run build:core`
+- `npm run check:core`
+- `npm run build:tailwind`
+- `npm run check:tailwind`
+- `npm run build:docs`
+- `npm run check:docs`
+- `npm run build:tokens`
+- `npm run check:tokens`
 
 ## Usage
 
-The supported modern entry points are package-first:
+### Core CSS
 
-- `@jeremedia/sol-core` for tokens, core CSS, bundled fonts, and runtime helpers
-- `@jeremedia/sol-tailwind` for the optional Tailwind v4 adapter
+```css
+@import "@jeremedia/sol-core/core.css";
+```
 
-Example:
+### Tailwind v4 Adapter
 
 ```css
 @import "@jeremedia/sol-core/core.css";
 @import "@jeremedia/sol-tailwind";
+
+@source "../app/views";
+@source "../app/javascript";
 ```
+
+### Runtime Helpers
 
 ```js
 import { SessionColor, loadAsianFonts } from "@jeremedia/sol-core";
+import { applySessionColorVariables } from "@jeremedia/sol-core/session-color";
 
 new SessionColor();
 loadAsianFonts({ provider: "self-hosted", basePath: "/fonts" });
+
+applySessionColorVariables({
+  rootElement: document.documentElement,
+  colorNumber: 8,
+});
 ```
+
+## Documentation
+
+- [apps/docs/README.md](/Volumes/jer4TBv3/workspaces/personal/sol/apps/docs/README.md)
+  Commands and scope for the docs fixture app.
+- [docs/modernization/roadmap.md](/Volumes/jer4TBv3/workspaces/personal/sol/docs/modernization/roadmap.md)
+  Rewrite phases and operational direction.
+- [docs/modernization/architecture.md](/Volumes/jer4TBv3/workspaces/personal/sol/docs/modernization/architecture.md)
+  Target package layout and design constraints.
+- [docs/modernization/parity-checklist.md](/Volumes/jer4TBv3/workspaces/personal/sol/docs/modernization/parity-checklist.md)
+  Behaviors that the rewrite is not allowed to lose.
+
+## Release Model
+
+Releases are branch-based and run through the workspace release script:
+
+```sh
+npm run release -- 5.0.0
+```
+
+That flow versions the workspace packages, rebuilds artifacts, creates a branch commit, and tags the release from branch history.

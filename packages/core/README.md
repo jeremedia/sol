@@ -5,6 +5,7 @@ This package is the first concrete boundary in the modernization branch.
 Current scope:
 
 - canonical token source under `src/tokens/sol.tokens.json`
+- bundled MoMA Sans source assets under `src/moma-sans`
 - generated CSS custom properties under `dist/tokens.css`
 - generated standalone foundation stylesheet under `dist/core.css`
 - bundled MoMA Sans font assets under `dist/moma-sans`
@@ -25,4 +26,4 @@ import { SessionColor, loadAsianFonts } from "@jeremedia/sol-core";
 import { applySessionColorVariables } from "@jeremedia/sol-core/session-color";
 ```
 
-This package is the supported foundation for the modern Sol implementation. It is no longer framed as a stepping stone to the legacy root build.
+This package is the supported foundation for the modern Sol implementation. It no longer depends on the old root `dist/` asset layout.

@@ -8,8 +8,7 @@ import { fontFiles } from "./core-fonts.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, "..");
-const repositoryRoot = resolve(packageRoot, "..", "..");
-const sourceDir = resolve(repositoryRoot, "dist", "moma-sans");
+const sourceDir = resolve(packageRoot, "src", "moma-sans");
 const distDir = resolve(packageRoot, "dist", "moma-sans");
 
 const checkMode = process.argv.includes("--check");

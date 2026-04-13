@@ -1,85 +1,83 @@
-# Target Architecture
+# Modern Architecture
 
-The modern fork should separate durable design-system concerns from adapters and documentation, without carrying the legacy runtime as a supported surface.
+The modern branch is now organized around explicit package boundaries instead of a shared root build.
 
-## Guiding Constraints
-
-1. Preserve Sol's design intelligence.
-   Typography metrics, spacing relationships, session color behavior, high-contrast behavior, and language-specific font decisions are product behavior, not implementation details.
-2. Replace hidden build magic with explicit artifacts.
-   Tokens, generated CSS, compatibility layers, and adapters should each have a visible source and output path.
-3. Keep framework-agnostic consumption first-class.
-   Tailwind support is useful, but Sol should not depend on Tailwind for its own existence.
-4. Prefer a clean break.
-   The legacy release line remains available on `legacy/v4`; this branch should optimize for the modern API instead of preserving the old packaging model.
-
-## Proposed Repository Shape
+## Current Repository Shape
 
 ```text
 packages/
   core/
-    tokens/
-    css/
-    fonts/
-    js/
+    src/
+      js/
+      moma-sans/
+      tokens/
+    dist/
   tailwind/
-    preset/
-    plugin/
+    dist/
 apps/
   docs/
-  examples/
+docs/
+  modernization/
 ```
 
-## Package Responsibilities
+## Package Boundaries
 
 ### `packages/core`
 
 The source of truth.
 
-- Token definitions
-- Generated CSS custom properties
-- Base font-face declarations
-- Small framework-agnostic JS utilities
-- Published as the stable foundation for new consumers
+- canonical design tokens
+- generated CSS custom properties
+- generated `core.css`
+- source font assets under `src/moma-sans`
+- published font assets under `dist/moma-sans`
+- framework-agnostic runtime helpers
 
 ### `packages/tailwind`
 
 The adapter layer.
 
-- CSS-first Tailwind v4 adapter built on `@theme inline`, `@utility`, and `@custom-variant`
-- Sol token aliases for Tailwind color, font, breakpoint, spacing, and type utilities
-- Small Sol-specific helpers for baseline-trimmed typography integration
-- No Sol-specific source of truth should live here
+- CSS-first Tailwind v4 integration
+- token aliases exposed through `@theme inline`
+- Sol-specific `@utility` and `@custom-variant` helpers
+- no source-of-truth values
 
 ### `apps/docs`
 
-The living documentation surface.
+The verification surface.
 
-- Static build checked into the repo for easy review
-- Visual parity fixtures
-- Interactive examples for tokens, typography, session color, language behavior, and accessibility states
+- static docs build checked into the repo
+- token, typography, session-color, language, and accessibility fixtures
+- artifact checks used by CI
+
+## Design Constraints
+
+1. Preserve Sol's design intelligence.
+   Typography metrics, spacing, motion, session color behavior, high-contrast behavior, and language-specific font decisions remain product behavior.
+2. Keep package boundaries explicit.
+   Core owns tokens and primitives. Tailwind remains an adapter. Docs remains a consumer and verification surface.
+3. Avoid hidden legacy dependencies.
+   The supported branch should not depend on root `dist/`, the old Sass tree, Webpack, or compatibility shims.
+4. Keep framework-agnostic consumption first-class.
+   Tailwind support is useful, but the core package must stand on its own.
 
 ## Release Model
 
-The current detached-head release flow should be replaced with a branch-based release model.
+Releases are branch-based.
 
-- Release commits must remain on branch history.
-- Generated artifacts should be produced in CI or release jobs, not manually force-added from detached state.
-- Versioning should be automated with a tool such as Changesets or semantic-release.
+- release commits stay on branch history
+- versioning happens through the workspace release script
+- generated artifacts are rebuilt from package sources, not restored from a detached release state
 
 ## Testing Model
 
-The rewrite needs more than unit tests.
-
-- Unit tests for JS utilities
-- Build validation in CI
-- CSS snapshot tests for token generation
-- Visual regression tests against parity fixtures
-- Example app smoke tests for docs and adapters
+- unit tests for runtime helpers
+- artifact checks for generated CSS, tokens, fonts, and docs output
+- CI that runs `build`, `test`, and artifact verification
 
 ## Non-Goals
 
-- Recreating every legacy atom as a first-class modern primitive
-- Baking Tailwind assumptions into core CSS
-- Tuning design values during the same phase as architecture changes
-- Reintroducing the legacy Sass/Webpack delivery path into the supported build
+- restoring the old root package shape
+- reviving the Sass/Webpack pipeline on `modernization/main`
+- preserving legacy class-level compatibility on the supported branch
+- moving design tuning and new component invention into the same phase as infrastructure cleanup
