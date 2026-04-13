@@ -1,0 +1,6 @@
+{
+  "name": "@jeremedia/sol-compat",
+  "private": true,
+  "version": "0.0.0-modernization",
+  "description": "Compatibility package for legacy Sol atoms and runtime entry points"
+}

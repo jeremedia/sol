@@ -1,0 +1,16 @@
+{
+  "name": "@jeremedia/sol-core",
+  "private": true,
+  "version": "0.0.0-modernization",
+  "description": "Modern Sol core tokens and shared primitives",
+  "type": "module",
+  "style": "dist/tokens.css",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "node ./scripts/generate-tokens.mjs",
+    "check:tokens": "node ./scripts/generate-tokens.mjs --check"
+  }
+}

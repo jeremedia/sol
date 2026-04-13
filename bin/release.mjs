@@ -127,7 +127,7 @@ try {
 
   run("yarn", ["build"]);
 
-  run("git", ["add", "package.json", "yarn.lock", "dist"]);
+  run("git", ["add", "package.json", "yarn.lock", "dist", "packages/core/dist"]);
   run("git", ["commit", "-m", `Release v${version}`]);
 
   releaseState = "committed";
@@ -142,7 +142,7 @@ try {
 } catch (error) {
   if (!options.dryRun && releaseState === "versioned") {
     try {
-      execFileSync("git", ["restore", "package.json", "yarn.lock", "dist"], {
+      execFileSync("git", ["restore", "package.json", "yarn.lock", "dist", "packages/core/dist"], {
         cwd: repoRoot,
         stdio: "inherit",
       });
