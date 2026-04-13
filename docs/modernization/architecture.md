@@ -49,9 +49,9 @@ The source of truth.
 
 The migration bridge.
 
-- Legacy atomic class grammar
-- Legacy JS entry points that can proxy to the new runtime
-- Feature flags or deprecation warnings where needed
+- Byte-for-byte legacy CSS and JS entry points synced from the root legacy build
+- Explicit package exports for adopters that still need the v4 surface
+- Migration guidance that points new work toward `packages/core` and adapters
 - Published for existing adopters that need a controlled migration path
 
 ### `packages/tailwind`

@@ -27,6 +27,7 @@ This fork is being modernized in-place from the `v4.2.0` release line.
 - `legacy/v4` preserves the last coherent released build for parity and regression checks.
 - `modernization/main` is the active branch for the modern architecture.
 - `packages/core` now owns the canonical token source, generated artifacts, bundled fonts, and the first standalone core stylesheet.
+- `packages/compat` now owns the generated legacy bridge artifacts instead of leaving them implicit at the repo root.
 - `packages/tailwind` now ships a CSS-first Tailwind v4 adapter over the core token layer.
 - `apps/docs` now builds a static fixture site for tokens, typography, and runtime state demos.
 - `docs/modernization/roadmap.md` describes the migration phases and repository plan.
@@ -47,6 +48,8 @@ This fork is being modernized in-place from the `v4.2.0` release line.
 To regenerate or verify the full core package artifacts, run `yarn run build:core` or `yarn run check:core`.
 
 To regenerate or verify the Tailwind adapter artifacts, run `yarn run build:tailwind` or `yarn run check:tailwind`.
+
+To regenerate or verify the compatibility package artifacts, run `yarn run build:compat` or `yarn run check:compat`.
 
 To regenerate or verify the docs app artifacts, run `yarn run build:docs` or `yarn run check:docs`.
 
