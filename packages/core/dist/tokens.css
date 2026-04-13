@@ -179,7 +179,9 @@
   --color--collection--background: var(--color--brand--6);
   --color--collection--background--rgb: var(--color--brand--6--rgb);
   --color--rgb: var(--color--black--rgb);
+  --color: rgba(var(--color--rgb), 1);
   --color--background--rgb: var(--color--white--rgb);
+  --color--background: rgba(var(--color--background--rgb), 1);
   --color--focus: var(--color--black);
   --color--focus--rgb: var(--color--black--rgb);
   --color--focus--reverse: var(--color--white);

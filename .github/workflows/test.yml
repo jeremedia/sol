@@ -13,8 +13,8 @@ jobs:
         cache: 'yarn'
     - name: Install modules
       run: yarn --frozen-lockfile
-    - name: Check generated token artifacts
-      run: yarn check:tokens
+    - name: Check generated core artifacts
+      run: yarn check:core
     - name: Build distribution
       run: yarn build
     - name: Run tests

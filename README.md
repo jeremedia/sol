@@ -26,7 +26,7 @@ This fork is being modernized in-place from the `v4.2.0` release line.
 
 - `legacy/v4` preserves the last coherent released build for parity and regression checks.
 - `modernization/main` is the active branch for the modern architecture.
-- `packages/core` now owns the canonical token source and generated token artifacts.
+- `packages/core` now owns the canonical token source, generated artifacts, bundled fonts, and the first standalone core stylesheet.
 - `docs/modernization/roadmap.md` describes the migration phases and repository plan.
 - `docs/modernization/architecture.md` captures the target package layout and design constraints.
 - `docs/modernization/parity-checklist.md` lists the behaviors that must survive the rewrite.
@@ -39,8 +39,10 @@ This fork is being modernized in-place from the `v4.2.0` release line.
 2. To build for development, run the first command. Or if you want to build and watch, use the second command<br>
 `yarn run build-dev` or `yarn run watch`
 
-3. To make build for distribution, run the following. This builds the legacy distribution and the generated core token artifacts.
+3. To make build for distribution, run the following. This builds the legacy distribution and the generated core package artifacts.
 `yarn run build`
+
+To regenerate or verify the full core package artifacts, run `yarn run build:core` or `yarn run check:core`.
 
 To regenerate or verify the canonical token artifacts only, run `yarn run build:tokens` or `yarn run check:tokens`.
 

@@ -5,13 +5,19 @@
   "description": "Modern Sol core tokens and shared primitives",
   "main": "src/js/index.js",
   "module": "src/js/index.js",
-  "style": "dist/tokens.css",
+  "style": "dist/core.css",
   "files": [
     "dist",
     "src"
   ],
   "scripts": {
-    "build": "node ./scripts/generate-tokens.mjs",
-    "check:tokens": "node ./scripts/generate-tokens.mjs --check"
+    "build:tokens": "node ./scripts/generate-tokens.mjs",
+    "check:tokens": "node ./scripts/generate-tokens.mjs --check",
+    "build:css": "node ./scripts/build-core-css.mjs",
+    "check:css": "node ./scripts/build-core-css.mjs --check",
+    "build:fonts": "node ./scripts/sync-font-assets.mjs",
+    "check:fonts": "node ./scripts/sync-font-assets.mjs --check",
+    "build": "yarn run build:tokens && yarn run build:css && yarn run build:fonts",
+    "check:artifacts": "yarn run check:tokens && yarn run check:css && yarn run check:fonts"
   }
 }

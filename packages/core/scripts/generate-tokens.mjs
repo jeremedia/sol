@@ -185,7 +185,9 @@ const defaultFocusVar = resolveColorRef(tokenSource.colors.focus.default.ref);
 const reverseFocusVar = resolveColorRef(tokenSource.colors.focus.reverse.ref);
 
 addDeclaration(root, "--color--rgb", `var(${defaultTextVar}--rgb)`);
+addDeclaration(root, "--color", "rgba(var(--color--rgb), 1)");
 addDeclaration(root, "--color--background--rgb", `var(${defaultBackgroundVar}--rgb)`);
+addDeclaration(root, "--color--background", "rgba(var(--color--background--rgb), 1)");
 addDeclaration(root, "--color--focus", `var(${defaultFocusVar})`);
 addDeclaration(root, "--color--focus--rgb", `var(${defaultFocusVar}--rgb)`);
 addDeclaration(root, "--color--focus--reverse", `var(${reverseFocusVar})`);

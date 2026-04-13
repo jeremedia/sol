@@ -6,7 +6,16 @@ Current scope:
 
 - canonical token source under `src/tokens/sol.tokens.json`
 - generated CSS custom properties under `dist/tokens.css`
+- generated standalone foundation stylesheet under `dist/core.css`
+- bundled MoMA Sans font assets under `dist/moma-sans`
 - generated machine-readable artifact under `dist/tokens.json`
 - modern runtime modules under `src/js`
 
-This package does not replace the legacy root build yet. It provides the stable token surface the later compatibility and Tailwind layers will build on.
+The core stylesheet exposes a small explicit API for the modernization path:
+
+- `.sol-typography` or `[data-sol-typography]` for baseline-trimmed text blocks
+- `sol-typography--weight-*` and `data-sol-typography-weight="*"` modifiers
+- `sol-typography--baseline-*` and `data-sol-typography-baseline="*"` modifiers
+- `sol-typography--size-*` and `data-sol-typography-size="*"` modifiers
+
+This package still does not replace the legacy root build yet. It now provides the stable token, font, and core typography surface the compatibility and Tailwind layers can build on.
