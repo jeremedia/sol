@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sol Modernization Fixtures</title>
+    <meta
+      name="description"
+      content="Living fixtures for the modern Sol fork: tokens, typography, session color, language behavior, and the Tailwind adapter."
+    >
+    <link rel="stylesheet" href="./app.css">
+  </head>
+  <body class="text-sol-text">
+    <main class="docs-shell">
+      <section class="docs-frame">
+        <header class="docs-hero">
+          <div class="docs-grid">
+            <span class="docs-meta text-sol-brand-2 text-sol-small font-sol-condensed tracking-sol-bold">
+              Museum of Modern Art
+            </span>
+            <div class="docs-grid">
+              <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Modern Sol</p>
+              <h1 class="sol-typography sol-weight-bold sol-baseline-solid sol-size-hero text-sol-brand-10">
+                Core tokens, baseline type, and the Tailwind adapter on one page.
+              </h1>
+              <p class="sol-typography sol-weight-regular sol-baseline-body sol-size-medium text-sol-gray-444">
+                This app is the first living review surface for the fork. It proves that the generated
+                <code>core.css</code> primitives and the CSS-first Tailwind adapter can render against the
+                same token source without a compatibility shim in the middle.
+              </p>
+            </div>
+          </div>
+          <div class="docs-grid">
+            <div class="fixture-card" style="--fixture-accent: var(--color--brand--2);">
+              <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Build Surface</p>
+              <p class="sol-typography sol-weight-bold sol-baseline-solid sol-size-large text-sol-black">
+                Static docs build
+              </p>
+              <p class="sol-typography sol-weight-regular sol-baseline-body sol-size-small text-sol-gray-555">
+                Generated under <code>apps/docs/dist</code>, verified in CI with <code>yarn check:docs</code>.
+              </p>
+            </div>
+            <div class="fixture-card" style="--fixture-accent: var(--color--brand--10);">
+              <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Adapter Shape</p>
+              <p class="sol-typography sol-weight-bold sol-baseline-solid sol-size-large text-sol-black">
+                Tailwind v4, CSS-first
+              </p>
+              <p class="sol-typography sol-weight-regular sol-baseline-body sol-size-small text-sol-gray-555">
+                <code>@theme inline</code>, <code>@utility</code>, and <code>@custom-variant</code> project
+                Sol values into Tailwind without duplicating the source of truth.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <section class="docs-section">
+          <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Token Surface</p>
+          <div class="docs-grid docs-grid--tokens">
+            <article class="token-swatch">
+              <div class="token-chip bg-sol-brand-2 text-sol-white">
+                <p class="text-sol-small font-sol-condensed tracking-sol-bold">Brand 2</p>
+              </div>
+              <p class="text-sol-small text-sol-gray-555">Tailwind token: <code>bg-sol-brand-2</code></p>
+            </article>
+            <article class="token-swatch">
+              <div class="token-chip bg-sol-brand-10 text-sol-white">
+                <p class="text-sol-small font-sol-condensed tracking-sol-bold">Brand 10</p>
+              </div>
+              <p class="text-sol-small text-sol-gray-555">Tailwind token: <code>bg-sol-brand-10</code></p>
+            </article>
+            <article class="token-swatch">
+              <div class="token-chip bg-sol-session text-sol-white">
+                <p class="text-sol-small font-sol-condensed tracking-sol-bold">Session</p>
+              </div>
+              <p class="text-sol-small text-sol-gray-555">Semantic token: <code>bg-sol-session</code></p>
+            </article>
+            <article class="token-swatch">
+              <div class="token-chip bg-sol-collection-background text-sol-black">
+                <p class="text-sol-small font-sol-condensed tracking-sol-bold">Collection</p>
+              </div>
+              <p class="text-sol-small text-sol-gray-555">Semantic token: <code>bg-sol-collection-background</code></p>
+            </article>
+          </div>
+        </section>
+
+        <section class="docs-section">
+          <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Typography Fixtures</p>
+          <div class="docs-grid docs-grid--fixtures">
+            <article class="fixture-card" style="--fixture-accent: var(--color--brand--2);">
+              <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Core CSS</p>
+              <h2 class="sol-typography sol-weight-bold sol-baseline-solid sol-size-large text-sol-brand-2">
+                Baseline-trimmed heading
+              </h2>
+              <p class="sol-typography sol-weight-regular sol-baseline-body sol-size-medium text-sol-gray-444">
+                The <code>.sol-typography</code> contract trims the bounding box with pseudo-elements and keeps
+                the MoMA Sans metrics explicit instead of burying them in a Sass atom graph.
+              </p>
+              <p class="sol-typography sol-weight-regular sol-baseline-body sol-size-small text-sol-gray-555">
+                Classes used: <code>sol-typography</code>, <code>sol-weight-bold</code>,
+                <code>sol-baseline-solid</code>, <code>sol-size-large</code>
+              </p>
+            </article>
+
+            <article class="fixture-card" style="--fixture-accent: var(--color--brand--10);">
+              <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Tailwind Adapter</p>
+              <p class="text-sol-large font-sol-condensed tracking-sol-bold text-sol-brand-10">
+                Tailwind-native Sol typography
+              </p>
+              <p class="text-sol-medium leading-sol-body text-sol-gray-444">
+                Sol tokens now project into Tailwind text, font, tracking, color, and breakpoint utilities without a JS preset.
+              </p>
+              <p class="text-sol-small text-sol-gray-555">
+                Classes used: <code>text-sol-large</code>, <code>font-sol-condensed</code>,
+                <code>tracking-sol-bold</code>, <code>leading-sol-body</code>,
+                <code>sol-desktop:text-sol-large-desktop</code>
+              </p>
+            </article>
+
+            <article class="fixture-card" style="--fixture-accent: var(--color--brand--7);">
+              <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Core + Tailwind</p>
+              <h3 class="sol-typography sol-weight-bold sol-baseline-solid sol-size-medium-large text-sol-brand-7">
+                Variable utilities on the core primitive
+              </h3>
+              <p class="sol-typography sol-weight-regular sol-baseline-body sol-size-small text-sol-gray-555">
+                The Tailwind package sets the same variables that <code>core.css</code> consumes, so the integration surface
+                is explicit and inspectable.
+              </p>
+            </article>
+
+            <article class="fixture-card" style="--fixture-accent: var(--color--brand--11);">
+              <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Responsive Alias</p>
+              <p class="text-sol-medium sol-desktop:text-sol-large-desktop font-sol-condensed tracking-sol-bold text-sol-brand-11">
+                The desktop size alias is generated from the same token JSON.
+              </p>
+              <p class="text-sol-small text-sol-gray-555">
+                Resize past the desktop breakpoint to verify <code>sol-desktop:text-sol-large-desktop</code>.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="docs-section">
+          <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Runtime States</p>
+          <div class="docs-grid docs-grid--states">
+            <article class="fixture-card" style="--fixture-accent: var(--color--session);">
+              <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Session Color</p>
+              <div class="docs-grid gap-4">
+                <div class="status-pill text-sol-small font-sol-condensed tracking-sol-bold">
+                  <span data-session-label>Brand 1</span>
+                </div>
+                <p class="sol-typography sol-weight-bold sol-baseline-solid sol-size-large text-sol-session">
+                  The accent now follows the same semantic session variable the runtime writes.
+                </p>
+                <p class="sol-typography sol-weight-regular sol-baseline-body sol-size-small text-sol-gray-555">
+                  This fixture cycles through the runtime sequence and updates
+                  <code>--color--session</code> and <code>--color--session--rgb</code> on <code>document.documentElement</code>.
+                </p>
+                <div class="fixture-actions">
+                  <button class="fixture-button text-sol-small font-sol-condensed tracking-sol-bold" data-session-next>
+                    Next Session Color
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="fixture-card" style="--fixture-accent: var(--color--brand--6);" data-high-contrast-fixture>
+              <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">High Contrast Variant</p>
+              <div class="docs-grid gap-4">
+                <button class="fixture-button text-sol-small font-sol-condensed tracking-sol-bold" data-high-contrast-toggle>
+                  High Contrast Off
+                </button>
+                <div class="bg-sol-gray-111 p-4 sol-high-contrast:bg-sol-session">
+                  <p class="text-sol-small font-sol-condensed tracking-sol-bold text-sol-white sol-high-contrast:text-sol-black">
+                    Tailwind variant
+                  </p>
+                  <p class="text-sol-small text-sol-gray-ccc sol-high-contrast:text-sol-black">
+                    The custom variant targets <code>[data-high-contrast]</code> and the legacy high-contrast classes.
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="docs-section">
+          <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Language Behavior</p>
+          <div class="docs-grid docs-grid--states">
+            <article class="fixture-card" style="--fixture-accent: var(--color--brand--12);">
+              <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Language Switch</p>
+              <div class="fixture-actions">
+                <button class="fixture-button text-sol-small font-sol-condensed tracking-sol-bold is-active" data-language="en">EN</button>
+                <button class="fixture-button text-sol-small font-sol-condensed tracking-sol-bold" data-language="ja">JA</button>
+                <button class="fixture-button text-sol-small font-sol-condensed tracking-sol-bold" data-language="ko">KO</button>
+                <button class="fixture-button text-sol-small font-sol-condensed tracking-sol-bold" data-language="zh-Hans">ZH</button>
+              </div>
+              <p class="text-sol-small text-sol-gray-555">
+                Active sample: <span data-language-label>English</span>
+              </p>
+            </article>
+
+            <article class="fixture-card" style="--fixture-accent: var(--color--brand--9);">
+              <p class="docs-kicker text-sol-small font-sol-condensed tracking-sol-bold">Tracking Variant</p>
+              <p
+                class="text-sol-large font-sol-sans tracking-sol-regular sol-lang-ja:tracking-sol-kanji sol-lang-ko:tracking-sol-korean text-sol-gray-111"
+                data-language-sample
+              >
+                Typography in Sol is not decoration. It is spacing, rhythm, and state rendered as a system.
+              </p>
+              <p class="text-sol-small text-sol-gray-555">
+                The adapter exposes language variants without inventing new token sources.
+              </p>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

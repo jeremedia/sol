@@ -25,8 +25,11 @@
     "check:core": "yarn --cwd packages/core check:artifacts",
     "build:tailwind": "yarn --cwd packages/tailwind build",
     "check:tailwind": "yarn --cwd packages/tailwind check:artifacts",
+    "build:docs": "yarn --cwd apps/docs build",
+    "check:docs": "yarn --cwd apps/docs check:artifacts",
     "check:packages": "yarn run check:core && yarn run check:tailwind",
-    "build": "yarn run build:legacy && yarn run build:core && yarn run build:tailwind",
+    "check:artifacts": "yarn run check:packages && yarn run check:docs",
+    "build": "yarn run build:legacy && yarn run build:core && yarn run build:tailwind && yarn run build:docs",
     "build-dev": "yarn run build-sass-dev && yarn run build-webpack-dev",
     "watch-sass": "sass --watch --poll src/stylesheets/main.scss:dist/sol.css",
     "watch-webpack": "webpack --progress --watch --config webpack.config.js --mode development",
@@ -37,8 +40,10 @@
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.10.2",
+    "@tailwindcss/cli": "^4.2.2",
     "babel-loader": "^8.1.0",
     "jest": "^26.0.1",
+    "tailwindcss": "^4.2.2",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },

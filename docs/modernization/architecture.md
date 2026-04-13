@@ -67,9 +67,9 @@ The adapter layer.
 
 The living documentation surface.
 
-- Versioned docs
+- Static build checked into the repo for easy review
 - Visual parity fixtures
-- Interactive examples for tokens, typography, session color, and accessibility states
+- Interactive examples for tokens, typography, session color, language behavior, and accessibility states
 
 ## Release Model
 

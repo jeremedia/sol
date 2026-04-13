@@ -1,9 +1,14 @@
 # `@jeremedia/sol-docs`
 
-This app will become the in-repo documentation surface for the modernization work.
+This app is the in-repo documentation surface for the modernization work.
 
-Planned contents:
+Current scope:
 
-- migration guides
-- parity fixtures for tokens, typography, and runtime behaviors
-- interactive examples for the core, compat, and adapter packages
+- static docs build under `dist/`
+- token, typography, and runtime state fixtures under `src/`
+- Tailwind v4 smoke surface built from `@jeremedia/sol-core` and `@jeremedia/sol-tailwind`
+
+Commands:
+
+- `yarn --cwd apps/docs build`
+- `yarn --cwd apps/docs check:artifacts`

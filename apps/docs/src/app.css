@@ -1,0 +1,221 @@
+@import "../../../packages/core/dist/core.css";
+
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "../../../packages/tailwind/dist/theme.css";
+@import "tailwindcss/preflight.css" layer(base);
+@import "../../../packages/tailwind/dist/utilities.css";
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+
+@source "./index.html";
+@source "./app.js";
+
+@layer base {
+  :root {
+    color-scheme: light;
+    background:
+      radial-gradient(circle at top left, rgba(var(--color--brand--10--rgb), 0.22), transparent 34rem),
+      radial-gradient(circle at bottom right, rgba(var(--color--brand--6--rgb), 0.18), transparent 32rem),
+      linear-gradient(180deg, rgba(var(--color--white--rgb), 1), rgba(var(--color--gray--eee--rgb), 1));
+    color: var(--color);
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      linear-gradient(rgba(var(--color--black--rgb), 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--color--black--rgb), 0.03) 1px, transparent 1px),
+      transparent;
+    background-position: center center;
+    background-size: 3.2rem 3.2rem;
+    color: var(--color);
+  }
+
+  ::selection {
+    background: rgba(var(--color--brand--10--rgb), 0.22);
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .docs-shell {
+    margin-inline: auto;
+    max-width: 144rem;
+    padding: 3.2rem 2rem 8rem;
+  }
+
+  .docs-frame {
+    position: relative;
+    overflow: clip;
+    border: 1px solid rgba(var(--color--black--rgb), 0.1);
+    background: rgba(var(--color--white--rgb), 0.8);
+    box-shadow:
+      0 1.6rem 5rem rgba(var(--color--black--rgb), 0.09),
+      inset 0 0 0 1px rgba(var(--color--white--rgb), 0.8);
+    backdrop-filter: blur(1.8rem);
+  }
+
+  .docs-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(135deg, rgba(var(--color--brand--2--rgb), 0.08), transparent 26%),
+      linear-gradient(315deg, rgba(var(--color--brand--10--rgb), 0.08), transparent 24%);
+  }
+
+  .docs-hero {
+    display: grid;
+    gap: 2.4rem;
+    padding: 2.4rem;
+  }
+
+  .docs-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    border: 1px solid rgba(var(--color--black--rgb), 0.12);
+    background: rgba(var(--color--white--rgb), 0.86);
+    padding: 0.8rem 1rem;
+    text-transform: uppercase;
+  }
+
+  .docs-section {
+    position: relative;
+    padding: 2.4rem;
+  }
+
+  .docs-section + .docs-section {
+    border-top: 1px solid rgba(var(--color--black--rgb), 0.08);
+  }
+
+  .docs-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.4rem;
+    color: rgba(var(--color--black--rgb), 0.7);
+    text-transform: uppercase;
+  }
+
+  .docs-kicker::before {
+    content: "";
+    width: 2.4rem;
+    height: 0.2rem;
+    background: var(--color--session);
+  }
+
+  .docs-grid {
+    display: grid;
+    gap: 1.6rem;
+  }
+
+  .fixture-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(var(--color--black--rgb), 0.08);
+    background: rgba(var(--color--white--rgb), 0.92);
+    padding: 1.6rem;
+    box-shadow: inset 0 0 0 1px rgba(var(--color--white--rgb), 0.65);
+  }
+
+  .fixture-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0.6rem;
+    background: var(--fixture-accent, var(--color--session));
+  }
+
+  .token-swatch {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .token-chip {
+    display: flex;
+    min-height: 9.6rem;
+    align-items: end;
+    border: 1px solid rgba(var(--color--black--rgb), 0.08);
+    padding: 1rem;
+    box-shadow: inset 0 0 0 1px rgba(var(--color--white--rgb), 0.28);
+  }
+
+  .fixture-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .fixture-button {
+    border: 1px solid rgba(var(--color--black--rgb), 0.12);
+    background: rgba(var(--color--white--rgb), 0.92);
+    padding: 0.8rem 1rem;
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
+  .fixture-button:hover {
+    border-color: rgba(var(--color--black--rgb), 0.28);
+    background: rgba(var(--color--brand--10--rgb), 0.08);
+  }
+
+  .fixture-button.is-active {
+    border-color: rgba(var(--color--black--rgb), 0.32);
+    background: rgba(var(--color--black--rgb), 1);
+    color: rgba(var(--color--white--rgb), 1);
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    border: 1px solid rgba(var(--color--black--rgb), 0.12);
+    background: rgba(var(--color--white--rgb), 0.88);
+    padding: 0.7rem 1rem;
+  }
+
+  .status-pill::before {
+    content: "";
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 999px;
+    background: var(--color--session);
+  }
+}
+
+@media (min-width: 768px) {
+  @layer components {
+    .docs-shell {
+      padding-inline: 3.2rem;
+    }
+
+    .docs-hero {
+      grid-template-columns: 1.4fr 0.8fr;
+      align-items: end;
+      padding: 3.2rem;
+    }
+
+    .docs-section {
+      padding: 3.2rem;
+    }
+
+    .docs-grid--tokens {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .docs-grid--fixtures {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .docs-grid--states {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+  }
+}
