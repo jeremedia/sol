@@ -14,7 +14,7 @@ This package does not define Sol values itself. It projects `@jeremedia/sol-core
 Recommended import order:
 
 ```css
-@import "@jeremedia/sol-core/dist/core.css";
+@import "@jeremedia/sol-core/core.css";
 @import "@jeremedia/sol-tailwind";
 
 @source "../app/views";

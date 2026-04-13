@@ -1,6 +1,6 @@
 # Target Architecture
 
-The modern fork should separate durable design-system concerns from compatibility and framework adapters.
+The modern fork should separate durable design-system concerns from adapters and documentation, without carrying the legacy runtime as a supported surface.
 
 ## Guiding Constraints
 
@@ -10,8 +10,8 @@ The modern fork should separate durable design-system concerns from compatibilit
    Tokens, generated CSS, compatibility layers, and adapters should each have a visible source and output path.
 3. Keep framework-agnostic consumption first-class.
    Tailwind support is useful, but Sol should not depend on Tailwind for its own existence.
-4. Support incremental migration.
-   Existing adopters need a compatibility lane while new adopters get the modern API directly.
+4. Prefer a clean break.
+   The legacy release line remains available on `legacy/v4`; this branch should optimize for the modern API instead of preserving the old packaging model.
 
 ## Proposed Repository Shape
 
@@ -21,9 +21,6 @@ packages/
     tokens/
     css/
     fonts/
-    js/
-  compat/
-    css/
     js/
   tailwind/
     preset/
@@ -44,15 +41,6 @@ The source of truth.
 - Base font-face declarations
 - Small framework-agnostic JS utilities
 - Published as the stable foundation for new consumers
-
-### `packages/compat`
-
-The migration bridge.
-
-- Byte-for-byte legacy CSS and JS entry points synced from the root legacy build
-- Explicit package exports for adopters that still need the v4 surface
-- Migration guidance that points new work toward `packages/core` and adapters
-- Published for existing adopters that need a controlled migration path
 
 ### `packages/tailwind`
 
@@ -94,4 +82,4 @@ The rewrite needs more than unit tests.
 - Recreating every legacy atom as a first-class modern primitive
 - Baking Tailwind assumptions into core CSS
 - Tuning design values during the same phase as architecture changes
-- Breaking consumers onto a flag day migration
+- Reintroducing the legacy Sass/Webpack delivery path into the supported build

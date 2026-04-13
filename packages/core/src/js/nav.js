@@ -36,8 +36,5 @@ class Nav {
   }
 }
 
-module.exports = {
-  __esModule: true,
-  default: Nav,
-  Nav,
-};
+export { Nav };
+export default Nav;

@@ -3,10 +3,3 @@ node_modules/
 dist/*.css
 dist/*.map
 dist/*.js
-
-example/dist/*.css
-example/dist/*.js
-example/dist/*.txt
-example/dist/moma-sans/
-example/dist/noto-sans/
-example/node_modules/

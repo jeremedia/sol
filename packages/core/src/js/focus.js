@@ -1,12 +1,12 @@
-const KeyCodes = require("./keycodes.js");
+import KeyCodes from "./keycodes.js";
 
-const ShowFocusClass = "show-focus";
+export const ShowFocusClass = "show-focus";
 
 const getFocusEventTarget = (doc = document) => {
   return doc.body || doc.documentElement || doc;
 };
 
-const ShowFocusOnTabPress = (doc = document) => {
+export const ShowFocusOnTabPress = (doc = document) => {
   getFocusEventTarget(doc).addEventListener("keydown", (event) => {
     const keyCode = event.which || event.keyCode;
 
@@ -16,7 +16,7 @@ const ShowFocusOnTabPress = (doc = document) => {
   });
 };
 
-const RemoveFocusOnClick = (doc = document) => {
+export const RemoveFocusOnClick = (doc = document) => {
   getFocusEventTarget(doc).addEventListener("click", (event) => {
     if (event.clientX === 0 && event.clientY === 0) {
       return;
@@ -33,11 +33,5 @@ class Focus {
   }
 }
 
-module.exports = {
-  __esModule: true,
-  default: Focus,
-  Focus,
-  RemoveFocusOnClick,
-  ShowFocusClass,
-  ShowFocusOnTabPress,
-};
+export { Focus };
+export default Focus;

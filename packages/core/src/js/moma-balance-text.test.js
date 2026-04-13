@@ -1,7 +1,7 @@
-import MoMABalanceText from './moma-balance-text';
+import MoMABalanceText from "./moma-balance-text.js";
 
 describe("BalanceText", () => {
-  const btClass = 'balance-text';
+  const balanceTextClassName = "balance-text";
   const shouldBalanceTextTests = [
     { input: "Judd", expected: false },
     { input: "a good day for books", expected: true },
@@ -25,22 +25,23 @@ describe("BalanceText", () => {
     { input: "Graphic Design: <nobr>Now in Production</nobr>", expected: true },
   ];
 
-  const momaBT = new MoMABalanceText(btClass);
+  const momaBalanceText = new MoMABalanceText(balanceTextClassName);
 
-  describe("ShouldBalanceText", () => {
-    shouldBalanceTextTests.forEach((t) => {
-      test(`matches for input: ${t.input}`, () => {
-        expect(momaBT.shouldBalanceText(t.input)).toBe(t.expected);
-      })
+  describe("shouldBalanceText", () => {
+    shouldBalanceTextTests.forEach(({ input, expected }) => {
+      test(`matches for input: ${input}`, () => {
+        expect(momaBalanceText.shouldBalanceText(input)).toBe(expected);
+      });
     });
   });
 
-  describe("ToggleBalanceTextClass", () => {
-    shouldBalanceTextTests.forEach((t) => {
-      test(`toggles for input: ${t.input}`, () => {
-        let expected = t.expected ? btClass : '';
-        expect(momaBT.toggleBalanceTextClass(t.input)).toBe(expected);
-      })
+  describe("toggleBalanceTextClass", () => {
+    shouldBalanceTextTests.forEach(({ input, expected }) => {
+      test(`toggles for input: ${input}`, () => {
+        expect(momaBalanceText.toggleBalanceTextClass(input)).toBe(
+          expected ? balanceTextClassName : ""
+        );
+      });
     });
   });
 });

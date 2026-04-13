@@ -1,29 +1,29 @@
-const { DocumentReady } = require("./util.js");
+import { DocumentReady } from "./util.js";
 
-const DEFAULT_FONT_WEIGHTS = "100;300;400;500;700;900";
-const NOTO_SANS_STYLESHEET_ID_PREFIX = "noto-sans-";
+export const DEFAULT_FONT_WEIGHTS = "100;300;400;500;700;900";
+export const NOTO_SANS_STYLESHEET_ID_PREFIX = "noto-sans-";
 
 let asianFontsChecked = false;
 
-const notoSansMappings = Object.freeze({
+export const notoSansMappings = Object.freeze({
   "zh-Hans": "SC",
   "zh-Hant": "TC",
   ko: "KR",
   ja: "JP",
 });
 
-const getAsianFontVariant = (lang) => {
+export const getAsianFontVariant = (lang) => {
   return notoSansMappings[lang] || null;
 };
 
-const buildGoogleFontsHref = ({
+export const buildGoogleFontsHref = ({
   variant,
   weights = DEFAULT_FONT_WEIGHTS,
 }) => {
   return `https://fonts.googleapis.com/css2?family=Noto+Sans+${variant}:wght@${weights}`;
 };
 
-const buildSelfHostedHref = ({
+export const buildSelfHostedHref = ({
   variant,
   basePath = "/fonts",
 }) => {
@@ -34,12 +34,12 @@ const buildSelfHostedHref = ({
   return `${normalizedBasePath}/noto-sans-${variant.toLowerCase()}.css`;
 };
 
-const createAsianFontLoader = (options = {}) => {
+export const createAsianFontLoader = (options = {}) => {
   const getDocument = options.getDocument || (() => document);
   const getLang =
     options.getLang ||
     ((doc) => doc.documentElement.getAttribute("lang") || "en");
-  const provider = options.provider || "google";
+  const provider = options.provider || "self-hosted";
   const hrefBuilder =
     options.hrefBuilder ||
     ((payload) => {
@@ -88,24 +88,12 @@ const createAsianFontLoader = (options = {}) => {
   };
 };
 
-const loadAsianFonts = (options = {}) => {
+export const loadAsianFonts = (options = {}) => {
   createAsianFontLoader(options)();
 };
 
-const resetAsianFontLoaderState = () => {
+export const resetAsianFontLoaderState = () => {
   asianFontsChecked = false;
 };
 
-module.exports = {
-  __esModule: true,
-  buildGoogleFontsHref,
-  buildSelfHostedHref,
-  createAsianFontLoader,
-  DEFAULT_FONT_WEIGHTS,
-  default: loadAsianFonts,
-  getAsianFontVariant,
-  loadAsianFonts,
-  notoSansMappings,
-  NOTO_SANS_STYLESHEET_ID_PREFIX,
-  resetAsianFontLoaderState,
-};
+export default loadAsianFonts;

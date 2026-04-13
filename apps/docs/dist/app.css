@@ -1214,12 +1214,12 @@ input.sol-typography::placeholder, input[data-sol-typography]::placeholder {
     }
   }
   .sol-high-contrast\:bg-sol-session {
-    &:where([data-high-contrast], [data-high-contrast] *, .\$color\/high-contrast, .\$color\/high-contrast *, .\$color\/background\:high-contrast, .\$color\/background\:high-contrast *) {
+    &:where([data-high-contrast], [data-high-contrast] *) {
       background-color: var(--color--session);
     }
   }
   .sol-high-contrast\:text-sol-black {
-    &:where([data-high-contrast], [data-high-contrast] *, .\$color\/high-contrast, .\$color\/high-contrast *, .\$color\/background\:high-contrast, .\$color\/background\:high-contrast *) {
+    &:where([data-high-contrast], [data-high-contrast] *) {
       color: var(--color--black);
     }
   }

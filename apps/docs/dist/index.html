@@ -26,7 +26,7 @@
               <p class="sol-typography sol-weight-regular sol-baseline-body sol-size-medium text-sol-gray-444">
                 This app is the first living review surface for the fork. It proves that the generated
                 <code>core.css</code> primitives and the CSS-first Tailwind adapter can render against the
-                same token source without a compatibility shim in the middle.
+                same token source as first-class packages without a legacy shim in the middle.
               </p>
             </div>
           </div>
@@ -37,7 +37,7 @@
                 Static docs build
               </p>
               <p class="sol-typography sol-weight-regular sol-baseline-body sol-size-small text-sol-gray-555">
-                Generated under <code>apps/docs/dist</code>, verified in CI with <code>yarn check:docs</code>.
+                Generated under <code>apps/docs/dist</code>, verified in CI with <code>npm run check:docs</code>.
               </p>
             </div>
             <div class="fixture-card" style="--fixture-accent: var(--color--brand--10);">
@@ -174,7 +174,7 @@
                     Tailwind variant
                   </p>
                   <p class="text-sol-small text-sol-gray-ccc sol-high-contrast:text-sol-black">
-                    The custom variant targets <code>[data-high-contrast]</code> and the legacy high-contrast classes.
+                    The custom variant targets the explicit <code>[data-high-contrast]</code> state only.
                   </p>
                 </div>
               </div>

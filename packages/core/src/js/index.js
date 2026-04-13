@@ -1,17 +1,10 @@
-const focusModule = require("./focus.js");
-const momaBalanceTextModule = require("./moma-balance-text.js");
-const navModule = require("./nav.js");
-const sessionColorModule = require("./session-color.js");
-const Util = require("./util.js");
-const viewporterModule = require("./viewporter.js");
-const asianFontsModule = require("./asian-fonts.js");
-
-const Focus = focusModule.default;
-const MoMABalanceText = momaBalanceTextModule.default;
-const Nav = navModule.default;
-const SessionColor = sessionColorModule.default;
-const Viewporter = viewporterModule.default;
-const { loadAsianFonts } = asianFontsModule;
+import Focus from "./focus.js";
+import MoMABalanceText from "./moma-balance-text.js";
+import Nav from "./nav.js";
+import SessionColor from "./session-color.js";
+import * as Util from "./util.js";
+import Viewporter from "./viewporter.js";
+import { loadAsianFonts } from "./asian-fonts.js";
 
 class SolCore {
   constructor(options = {}) {
@@ -25,15 +18,5 @@ class SolCore {
   }
 }
 
-module.exports = {
-  __esModule: true,
-  default: SolCore,
-  SolCore,
-  Focus,
-  loadAsianFonts,
-  MoMABalanceText,
-  Nav,
-  SessionColor,
-  Util,
-  Viewporter,
-};
+export { Focus, loadAsianFonts, MoMABalanceText, Nav, SessionColor, SolCore, Util, Viewporter };
+export default SolCore;

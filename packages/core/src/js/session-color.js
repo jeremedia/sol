@@ -1,19 +1,7 @@
-const { BaseDomain } = require("./util.js");
+import { BaseDomain } from "./util.js";
 
-const SESSION_COLOR_COOKIE_KEY = "sessionHighlightColor";
-const SESSION_COLOR_SEQUENCE = Object.freeze([1, 5, 8, 7, 10, 11, 12]);
-const sessionColorClassRegex = /\$color\/session\:\S+/;
-
-const highlightColors = Object.freeze(
-  SESSION_COLOR_SEQUENCE.reduce((colors, colorNumber, index) => {
-    colors[index] = `$color/session:${colorNumber}`;
-    return colors;
-  }, {})
-);
-
-const createSessionColorClass = (colorNumber) => {
-  return `$color/session:${colorNumber}`;
-};
+export const SESSION_COLOR_COOKIE_KEY = "sessionHighlightColor";
+export const SESSION_COLOR_SEQUENCE = Object.freeze([1, 5, 8, 7, 10, 11, 12]);
 
 const parseCookieValue = (cookieString, name) => {
   const values = cookieString.split(";");
@@ -29,7 +17,7 @@ const parseCookieValue = (cookieString, name) => {
   return null;
 };
 
-const readSessionColorKey = (cookieString) => {
+export const readSessionColorKey = (cookieString) => {
   const cookieValue = parseCookieValue(cookieString, SESSION_COLOR_COOKIE_KEY);
 
   if (cookieValue === null) {
@@ -53,7 +41,7 @@ const getRandomSessionColorKey = () => {
   return Math.floor(Math.random() * SESSION_COLOR_SEQUENCE.length);
 };
 
-const getSessionColorNumber = (colorKey) => {
+export const getSessionColorNumber = (colorKey) => {
   return SESSION_COLOR_SEQUENCE[colorKey] || SESSION_COLOR_SEQUENCE[0];
 };
 
@@ -67,15 +55,7 @@ const writeSessionColorCookie = ({
   documentObject.cookie = `${SESSION_COLOR_COOKIE_KEY}=${colorKey}; path=/${domainAttribute};`;
 };
 
-const removeSessionColorClasses = (rootElement) => {
-  [...rootElement.classList].forEach((className) => {
-    if (sessionColorClassRegex.test(className)) {
-      rootElement.classList.remove(className);
-    }
-  });
-};
-
-const applySessionColorVariables = ({
+export const applySessionColorVariables = ({
   rootElement = document.documentElement,
   colorNumber,
 }) => {
@@ -91,7 +71,6 @@ class SessionColor {
     this.documentObject = options.documentObject || document;
     this.rootElement = options.rootElement || this.documentObject.documentElement;
     this.baseDomain = options.baseDomain || BaseDomain;
-    this.writeLegacyClass = options.writeLegacyClass !== false;
     this.writeVariables = options.writeVariables !== false;
     this.colorKey = null;
 
@@ -131,24 +110,8 @@ class SessionColor {
         colorNumber,
       });
     }
-
-    if (this.writeLegacyClass) {
-      removeSessionColorClasses(this.rootElement);
-      this.rootElement.classList.add(createSessionColorClass(colorNumber));
-    }
   }
 }
 
-module.exports = {
-  __esModule: true,
-  default: SessionColor,
-  SessionColor,
-  applySessionColorVariables,
-  createSessionColorClass,
-  getSessionColorNumber,
-  highlightColors,
-  readSessionColorKey,
-  SESSION_COLOR_COOKIE_KEY,
-  SESSION_COLOR_SEQUENCE,
-  sessionColorClassRegex,
-};
+export { SessionColor };
+export default SessionColor;

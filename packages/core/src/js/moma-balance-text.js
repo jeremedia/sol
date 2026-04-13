@@ -1,11 +1,11 @@
-const BalanceText = require("balance-text");
-const {
+import BalanceText from "balance-text";
+import {
   GetElementsList,
   IsMobileOrTablet,
   WindowHasSize,
-} = require("./util.js");
+} from "./util.js";
 
-const BalanceTextClass = "balance-text";
+export const BalanceTextClass = "balance-text";
 
 class MoMABalanceText {
   constructor(className) {
@@ -151,9 +151,5 @@ class MoMABalanceText {
   }
 }
 
-module.exports = {
-  __esModule: true,
-  BalanceTextClass,
-  default: MoMABalanceText,
-  MoMABalanceText,
-};
+export { MoMABalanceText };
+export default MoMABalanceText;

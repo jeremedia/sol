@@ -18,4 +18,11 @@ The core stylesheet exposes a small explicit API for the modernization path:
 - `sol-typography--baseline-*` and `data-sol-typography-baseline="*"` modifiers
 - `sol-typography--size-*` and `data-sol-typography-size="*"` modifiers
 
-This package still does not replace the legacy root build yet. It now provides the stable token, font, and core typography surface the compatibility and Tailwind layers can build on.
+Runtime modules are exported from the package root and named subpaths:
+
+```js
+import { SessionColor, loadAsianFonts } from "@jeremedia/sol-core";
+import { applySessionColorVariables } from "@jeremedia/sol-core/session-color";
+```
+
+This package is the supported foundation for the modern Sol implementation. It is no longer framed as a stepping stone to the legacy root build.

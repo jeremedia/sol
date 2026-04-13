@@ -10,5 +10,5 @@ Current scope:
 
 Commands:
 
-- `yarn --cwd apps/docs build`
-- `yarn --cwd apps/docs check:artifacts`
+- `npm run build --workspace @jeremedia/sol-docs`
+- `npm run check:artifacts --workspace @jeremedia/sol-docs`

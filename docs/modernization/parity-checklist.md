@@ -33,8 +33,8 @@ This checklist is the guardrail for the modernization. If a behavior is on this 
 ## Layout and Utility Surface
 
 - Wrapper, bleed, and page extension behaviors remain available
-- Grid and flex utility behavior remains available through either compat or mapped modern APIs
-- Margin, padding, width, height, ratio, visibility, and overflow utilities have a defined migration path
+- Grid and flex utility behavior remains available through modern APIs
+- Margin, padding, width, height, ratio, visibility, and overflow utilities have a defined modern replacement surface
 - Breakpoint behavior remains mobile-first and deterministic
 
 ## JavaScript Runtime
@@ -53,3 +53,4 @@ This checklist is the guardrail for the modernization. If a behavior is on this 
 - Release commits remain on branch history
 - Published package metadata matches the released tag version
 - Docs/examples demonstrate the current published behavior
+- The supported workspace no longer depends on the legacy root `dist/` pipeline

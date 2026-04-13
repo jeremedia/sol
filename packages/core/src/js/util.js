@@ -1,11 +1,11 @@
-const IsMobileOrTablet = () => {
+export const IsMobileOrTablet = () => {
   const iOS = /iOS|iPhone|iPad/g.test(navigator.userAgent);
   const android = /Android/g.test(navigator.userAgent);
 
   return android || iOS;
 };
 
-const DocumentReady = (fn) => {
+export const DocumentReady = (fn) => {
   if (document.readyState !== "loading") {
     fn();
   } else {
@@ -13,11 +13,11 @@ const DocumentReady = (fn) => {
   }
 };
 
-const WindowHasSize = () => {
+export const WindowHasSize = () => {
   return window.innerHeight > 0 && window.innerWidth > 0;
 };
 
-const GetElementsList = (elements) => {
+export const GetElementsList = (elements) => {
   if (!elements) {
     return [];
   }
@@ -36,7 +36,7 @@ const GetElementsList = (elements) => {
   return elsArray;
 };
 
-const BaseDomain = () => {
+export const BaseDomain = () => {
   if (!document.domain) {
     return "";
   }
@@ -54,12 +54,4 @@ const BaseDomain = () => {
   document.cookie = `${sentinel}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;domain=${domain};`;
 
   return domain;
-};
-
-module.exports = {
-  BaseDomain,
-  DocumentReady,
-  GetElementsList,
-  IsMobileOrTablet,
-  WindowHasSize,
 };

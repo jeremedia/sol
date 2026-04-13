@@ -252,7 +252,7 @@ const utilitiesLines = [
   "@custom-variant sol-lang-ko (&:lang(ko));",
   "@custom-variant sol-lang-zh-hans (&:lang(zh-Hans));",
   "@custom-variant sol-lang-zh-hant (&:lang(zh-Hant));",
-  '@custom-variant sol-high-contrast (&:where([data-high-contrast], [data-high-contrast] *, .\\$color\\/high-contrast, .\\$color\\/high-contrast *, .\\$color\\/background\\:high-contrast, .\\$color\\/background\\:high-contrast *));',
+  "@custom-variant sol-high-contrast (&:where([data-high-contrast], [data-high-contrast] *));",
   "",
   ...typographyUtilityBlocks()
 ];

@@ -1,4 +1,4 @@
-const checkElementDims = (cssProperties) => {
+export const checkElementDims = (cssProperties) => {
   const testElement = document.createElement("div");
   testElement.style.cssText = cssProperties;
   document.documentElement.insertBefore(testElement, document.documentElement.firstChild);
@@ -17,7 +17,7 @@ const updateRemValue = (cssVariable, cssValue) => {
   document.documentElement.style.setProperty(cssVariable, ` ${cssValue / 10}rem`);
 };
 
-const updateVHOffset = () => {
+export const updateVHOffset = () => {
   const initialVisibleHeight = checkElementDims("position: fixed; top: 0; bottom: 0;").height;
   const visibleHeight = window.innerHeight;
   const vh100 = checkElementDims("position: fixed; top: 0; height: 100vh").height;
@@ -29,7 +29,7 @@ const updateVHOffset = () => {
   }, 100);
 };
 
-const updateVisibleHeight = () => {
+export const updateVisibleHeight = () => {
   const visibleHeight = window.innerHeight;
   updateRemValue("--visible-height", visibleHeight);
   setTimeout(() => {
@@ -37,7 +37,7 @@ const updateVisibleHeight = () => {
   }, 100);
 };
 
-const updateScrollbarWidth = () => {
+export const updateScrollbarWidth = () => {
   const percent100 = checkElementDims("position: fixed; top: 0; width: 100%; height: 200vh;").width;
   const scrollbarWidth = window.innerWidth - percent100;
   updateRemValue("--scrollbar-width", scrollbarWidth);
@@ -75,12 +75,5 @@ class Viewporter {
   }
 }
 
-module.exports = {
-  __esModule: true,
-  default: Viewporter,
-  Viewporter,
-  checkElementDims,
-  updateScrollbarWidth,
-  updateVHOffset,
-  updateVisibleHeight,
-};
+export { Viewporter };
+export default Viewporter;

@@ -1,4 +1,4 @@
-module.exports = Object.freeze({
+const KeyCodes = Object.freeze({
   ENTER: 13,
   ESCAPE: 27,
   LEFT: 37,
@@ -6,3 +6,5 @@ module.exports = Object.freeze({
   SPACEBAR: 32,
   TAB: 9,
 });
+
+export default KeyCodes;

@@ -1,18 +1,25 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, "..");
+const versionedPackageFiles = [
+  "package.json",
+  "packages/core/package.json",
+  "packages/tailwind/package.json",
+  "apps/docs/package.json",
+];
 
 const usage = `
-Usage: yarn release [--dry-run] [--skip-tests] [--no-push] <version>
+Usage: npm run release -- [--dry-run] [--skip-tests] [--no-push] <version>
 
 Examples:
-  yarn release 4.2.1
-  yarn release --dry-run 5.0.0-beta.1
+  npm run release -- 5.0.0
+  npm run release -- --dry-run 5.0.0-beta.1
 `;
 
 const args = process.argv.slice(2);
@@ -84,6 +91,15 @@ function capture(command, commandArgs) {
   return query(command, commandArgs);
 }
 
+function setWorkspaceVersion(version) {
+  for (const relativePath of versionedPackageFiles) {
+    const filePath = resolve(repoRoot, relativePath);
+    const manifest = JSON.parse(readFileSync(filePath, "utf8"));
+    manifest.version = version;
+    writeFileSync(filePath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+  }
+}
+
 const branch = capture("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
 
 if (branch === "HEAD") {
@@ -110,24 +126,32 @@ let releaseState = "clean";
 try {
   console.log(`Preparing release ${version} from branch ${branch}.`);
 
-  run("yarn", ["install", "--frozen-lockfile"]);
+  run("npm", ["ci"]);
 
   if (!options.skipTests) {
-    run("yarn", ["test"]);
+    run("npm", ["test"]);
   }
 
   releaseState = "versioned";
-  run("yarn", [
-    "version",
-    "--no-git-tag-version",
-    "--no-commit-hooks",
-    "--new-version",
-    version,
+  if (options.dryRun) {
+    console.log(`$ set workspace version ${version}`);
+  } else {
+    setWorkspaceVersion(version);
+  }
+
+  run("npm", ["run", "build"]);
+
+  run("git", [
+    "add",
+    "package.json",
+    "package-lock.json",
+    "packages/core/package.json",
+    "packages/tailwind/package.json",
+    "apps/docs/package.json",
+    "packages/core/dist",
+    "packages/tailwind/dist",
+    "apps/docs/dist",
   ]);
-
-  run("yarn", ["build"]);
-
-  run("git", ["add", "package.json", "yarn.lock", "dist", "packages/core/dist"]);
   run("git", ["commit", "-m", `Release v${version}`]);
 
   releaseState = "committed";
@@ -142,10 +166,24 @@ try {
 } catch (error) {
   if (!options.dryRun && releaseState === "versioned") {
     try {
-      execFileSync("git", ["restore", "package.json", "yarn.lock", "dist", "packages/core/dist"], {
-        cwd: repoRoot,
-        stdio: "inherit",
-      });
+      execFileSync(
+        "git",
+        [
+          "restore",
+          "package.json",
+          "package-lock.json",
+          "packages/core/package.json",
+          "packages/tailwind/package.json",
+          "apps/docs/package.json",
+          "packages/core/dist",
+          "packages/tailwind/dist",
+          "apps/docs/dist",
+        ],
+        {
+          cwd: repoRoot,
+          stdio: "inherit",
+        }
+      );
     } catch (restoreError) {
       console.error("Automatic rollback failed after the release error.");
     }

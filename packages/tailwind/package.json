@@ -1,9 +1,13 @@
 {
   "name": "@jeremedia/sol-tailwind",
-  "private": true,
   "version": "0.0.0-modernization",
   "description": "CSS-first Tailwind v4 adapters for modern Sol tokens",
   "style": "dist/index.css",
+  "license": "SEE LICENSE IN README.MD",
+  "sideEffects": [
+    "*.css",
+    "**/*.css"
+  ],
   "files": [
     "dist",
     "README.md"

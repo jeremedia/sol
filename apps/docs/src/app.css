@@ -1,10 +1,10 @@
-@import "../../../packages/core/dist/core.css";
+@import "@jeremedia/sol-core/core.css";
 
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
-@import "../../../packages/tailwind/dist/theme.css";
+@import "@jeremedia/sol-tailwind/theme.css";
 @import "tailwindcss/preflight.css" layer(base);
-@import "../../../packages/tailwind/dist/utilities.css";
+@import "@jeremedia/sol-tailwind/utilities.css";
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
 
 @source "./index.html";

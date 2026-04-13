@@ -18,66 +18,55 @@
 
 ## Documentation
 
-Classes and available modules are documented on the [Wiki](https://github.com/MuseumofModernArt/sol/wiki). You can see an example of how to include in your site in the `example` folder, and for more examples of how to use various classes and components check `sol-101`.
+The modern implementation is documented in-repo:
 
-## Modernization Fork
+- `apps/docs` contains the living fixtures and integration examples.
+- `docs/modernization/roadmap.md` tracks the rewrite plan and remaining work.
+- `docs/modernization/architecture.md` documents the target package boundaries.
+- `docs/modernization/parity-checklist.md` records the behaviors that must survive the rewrite.
 
-This fork is being modernized in-place from the `v4.2.0` release line.
+## Modern Workspace
 
-- `legacy/v4` preserves the last coherent released build for parity and regression checks.
-- `modernization/main` is the active branch for the modern architecture.
-- `packages/core` now owns the canonical token source, generated artifacts, bundled fonts, and the first standalone core stylesheet.
-- `packages/compat` now owns the generated legacy bridge artifacts instead of leaving them implicit at the repo root.
-- `packages/tailwind` now ships a CSS-first Tailwind v4 adapter over the core token layer.
-- `apps/docs` now builds a static fixture site for tokens, typography, and runtime state demos.
+This fork is being rebuilt in-place from the `v4.2.0` release line as a clean-break, modern implementation.
+
+- `legacy/v4` preserves the last coherent legacy release for systems that still require it.
+- `modernization/main` is the active branch for the modern implementation.
+- `packages/core` is the source of truth for tokens, core CSS, bundled fonts, and runtime modules.
+- `packages/tailwind` provides the CSS-first Tailwind v4 adapter over the core token layer.
+- `apps/docs` is the living fixture site for tokens, typography, and runtime behavior.
 - `docs/modernization/roadmap.md` describes the migration phases and repository plan.
 - `docs/modernization/architecture.md` captures the target package layout and design constraints.
 - `docs/modernization/parity-checklist.md` lists the behaviors that must survive the rewrite.
 
 ## Development
 
-1. To install, make sure you have homebrew installed, and then run this install Dart Sass<br>
-`yarn install-sass`
+Install workspace dependencies with `npm install`, then run `npm run build` to generate the supported artifacts.
 
-2. To build for development, run the first command. Or if you want to build and watch, use the second command<br>
-`yarn run build-dev` or `yarn run watch`
+To regenerate or verify the full core package artifacts, run `npm run build:core` or `npm run check:core`.
 
-3. To make build for distribution, run the following. This builds the legacy distribution and the generated core package artifacts.
-`yarn run build`
+To regenerate or verify the Tailwind adapter artifacts, run `npm run build:tailwind` or `npm run check:tailwind`.
 
-To regenerate or verify the full core package artifacts, run `yarn run build:core` or `yarn run check:core`.
+To regenerate or verify the docs app artifacts, run `npm run build:docs` or `npm run check:docs`.
 
-To regenerate or verify the Tailwind adapter artifacts, run `yarn run build:tailwind` or `yarn run check:tailwind`.
-
-To regenerate or verify the compatibility package artifacts, run `yarn run build:compat` or `yarn run check:compat`.
-
-To regenerate or verify the docs app artifacts, run `yarn run build:docs` or `yarn run check:docs`.
-
-To regenerate or verify the canonical token artifacts only, run `yarn run build:tokens` or `yarn run check:tokens`.
-
-To link with `moma-go`, in the project folder, run `yarn link`.
-In `moma-go`, run `yarn link sol`. This creates a [symlink](https://classic.yarnpkg.com/en/docs/cli/link/) to your local version.
-
-## Releases
-
-Create releases from a clean branch checkout. The release script now commits the built artifacts on the active branch, creates an annotated tag on that same commit, and can push the branch and tag to `origin`.
-
-Run `yarn release 1.0.0`, replacing `1.0.0` with the exact semantic version you want to publish. Pre-releases should be passed explicitly, for example `yarn release 5.0.0-beta.1`.
-
-Useful flags:
-
-- `--dry-run` prints the release plan without mutating the branch.
-- `--skip-tests` skips Jest before the release build.
-- `--no-push` keeps the release commit and tag local.
-
-Once the artifact files have been generated and the tag has been created, draft the GitHub release from that tag.
-
-More on semantic versioning [here](https://classic.yarnpkg.com/en/docs/dependency-versions#toc-semantic-versioning).
+To regenerate or verify the canonical token artifacts only, run `npm run build:tokens` or `npm run check:tokens`.
 
 ## Usage
 
-You should just get `dist/sol.css` or `dist/sol.min.css`. Fonts are also provided in the `dist` folder.
+The supported modern entry points are package-first:
 
-To add to your package manager, such as yarn, do `yarn add github:MuseumofModernArt/sol`. If you would like to lock to a specific version, append `#v1.0.0` to the end. More on all this [here](http://thecodebarbarian.com/github-is-my-favorite-private-npm-registry.html).
+- `@jeremedia/sol-core` for tokens, core CSS, bundled fonts, and runtime helpers
+- `@jeremedia/sol-tailwind` for the optional Tailwind v4 adapter
 
-To update your version of the MoMA Style to the latest release, `yarn upgrade sol`. To update to a specific version, run `yarn upgrade sol#[version]`.
+Example:
+
+```css
+@import "@jeremedia/sol-core/core.css";
+@import "@jeremedia/sol-tailwind";
+```
+
+```js
+import { SessionColor, loadAsianFonts } from "@jeremedia/sol-core";
+
+new SessionColor();
+loadAsianFonts({ provider: "self-hosted", basePath: "/fonts" });
+```

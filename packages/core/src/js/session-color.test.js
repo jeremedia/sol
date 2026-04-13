@@ -2,9 +2,9 @@ import SessionColor, {
   SESSION_COLOR_SEQUENCE,
   applySessionColorVariables,
   readSessionColorKey,
-} from "./session-color";
+} from "./session-color.js";
 
-describe("core session color", () => {
+describe("session color", () => {
   beforeEach(() => {
     document.cookie = "sessionHighlightColor=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;";
     document.documentElement.className = "";
@@ -31,15 +31,29 @@ describe("core session color", () => {
     );
   });
 
-  test("random selection can reach the last session color", () => {
-    const originalRandom = Math.random;
-    Math.random = jest.fn(() => 0.999999);
+  test("sets a random cookie value and applies variables without legacy classes", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0.999999);
 
     const sessionColor = new SessionColor();
 
     expect(sessionColor.colorKey).toBe(SESSION_COLOR_SEQUENCE.length - 1);
-    expect(document.documentElement.classList.contains("$color/session:12")).toBe(true);
+    expect(document.cookie).toContain("sessionHighlightColor=6");
+    expect(document.documentElement.style.getPropertyValue("--color--session")).toBe(
+      "var(--color--brand--12)"
+    );
+    expect(document.documentElement.className).toBe("");
+  });
 
-    Math.random = originalRandom;
+  test("reuses an existing cookie value instead of re-randomizing", () => {
+    document.cookie = "sessionHighlightColor=3; path=/;";
+    vi.spyOn(Math, "random");
+
+    const sessionColor = new SessionColor();
+
+    expect(sessionColor.colorKey).toBe(3);
+    expect(Math.random).not.toHaveBeenCalled();
+    expect(document.documentElement.style.getPropertyValue("--color--session")).toBe(
+      "var(--color--brand--7)"
+    );
   });
 });
