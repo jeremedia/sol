@@ -40,6 +40,11 @@
   "dependencies": {
     "balance-text": "^3.3.0"
   },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
+  },
   "engines": {
     "node": "20"
   }

@@ -7,5 +7,6 @@ Current scope:
 - canonical token source under `src/tokens/sol.tokens.json`
 - generated CSS custom properties under `dist/tokens.css`
 - generated machine-readable artifact under `dist/tokens.json`
+- modern runtime modules under `src/js`
 
 This package does not replace the legacy root build yet. It provides the stable token surface the later compatibility and Tailwind layers will build on.
