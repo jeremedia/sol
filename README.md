@@ -20,6 +20,16 @@
 
 Classes and available modules are documented on the [Wiki](https://github.com/MuseumofModernArt/sol/wiki). You can see an example of how to include in your site in the `example` folder, and for more examples of how to use various classes and components check `sol-101`.
 
+## Modernization Fork
+
+This fork is being modernized in-place from the `v4.2.0` release line.
+
+- `legacy/v4` preserves the last coherent released build for parity and regression checks.
+- `modernization/main` is the active branch for the modern architecture.
+- `docs/modernization/roadmap.md` describes the migration phases and repository plan.
+- `docs/modernization/architecture.md` captures the target package layout and design constraints.
+- `docs/modernization/parity-checklist.md` lists the behaviors that must survive the rewrite.
+
 ## Development
 
 1. To install, make sure you have homebrew installed, and then run this install Dart Sass<br>
@@ -36,11 +46,17 @@ In `moma-go`, run `yarn link sol`. This creates a [symlink](https://classic.yarn
 
 ## Releases
 
-To create a release, merge all PRs that will be part of it into `main`.
+Create releases from a clean branch checkout. The release script now commits the built artifacts on the active branch, creates an annotated tag on that same commit, and can push the branch and tag to `origin`.
 
-Then with `main` checked out, run `yarn release 1.0.0`, replacing 1.0.0 with the release version number.
+Run `yarn release 1.0.0`, replacing `1.0.0` with the exact semantic version you want to publish. Pre-releases should be passed explicitly, for example `yarn release 5.0.0-beta.1`.
 
-Once the artifact files have been generated and the release has been tagged, go to Github and draft a new release, using the tag version that was created.
+Useful flags:
+
+- `--dry-run` prints the release plan without mutating the branch.
+- `--skip-tests` skips Jest before the release build.
+- `--no-push` keeps the release commit and tag local.
+
+Once the artifact files have been generated and the tag has been created, draft the GitHub release from that tag.
 
 More on semantic versioning [here](https://classic.yarnpkg.com/en/docs/dependency-versions#toc-semantic-versioning).
 
